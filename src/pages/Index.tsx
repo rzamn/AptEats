@@ -34,16 +34,42 @@ const Index = () => {
       observer.observe(el);
     });
 
+    // Handle hash links for smooth scrolling
+    const handleHashClick = () => {
+      const { hash } = window.location;
+      if (hash) {
+        const id = hash.replace('#', '');
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    };
+
+    // Call on initial load in case URL contains hash
+    handleHashClick();
+
+    // Add event listener for hash changes
+    window.addEventListener('hashchange', handleHashClick);
+
     return () => {
       document.body.classList.remove('loaded');
       observer.disconnect();
+      window.removeEventListener('hashchange', handleHashClick);
     };
   }, []);
 
+  const scrollToCalculator = () => {
+    const calculatorSection = document.getElementById('calculator');
+    if (calculatorSection) {
+      calculatorSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen">
-      <Navbar />
-      <HeroSection />
+      <Navbar scrollToCalculator={scrollToCalculator} />
+      <HeroSection scrollToCalculator={scrollToCalculator} />
       <CalorieCalculator />
       <MealSuggestions />
       <WorkoutRecommendations />
@@ -59,7 +85,15 @@ const Index = () => {
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Let AI do the hard work of tracking calories, planning meals, and optimizing your workouts.
             </p>
-            <Button size="lg" className="mx-auto" icon={<ArrowRight size={18} />}>
+            <p className="text-apteats-moss font-medium mb-8">
+              100% Free — No Payments, No Subscriptions
+            </p>
+            <Button 
+              size="lg" 
+              className="mx-auto" 
+              icon={<ArrowRight size={18} />}
+              onClick={scrollToCalculator}
+            >
               Start Your AI Journey
             </Button>
           </div>
@@ -75,6 +109,7 @@ const Index = () => {
               <p className="text-sm text-muted-foreground mb-4">
                 AI-powered nutrition and workout guidance, tailored for you.
               </p>
+              <p className="text-sm font-medium">100% Free — Always</p>
             </div>
             
             <div>

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Card from '../shared/Card';
 import Button from '../shared/Button';
+import WorkoutTimer from './WorkoutTimer';
 import { 
   Activity, 
   Clock, 
@@ -16,6 +17,8 @@ import {
   Brain, 
   Zap
 } from 'lucide-react';
+import { toast } from "sonner";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 interface WorkoutCardProps {
   title: string;
@@ -43,11 +46,28 @@ const WorkoutCard = ({
   locked = false 
 }: WorkoutCardProps) => {
   const [showDetails, setShowDetails] = useState(false);
+  const [isWorkoutStarted, setIsWorkoutStarted] = useState(false);
+  const [isWorkoutCompleted, setIsWorkoutCompleted] = useState(false);
   
   const intensityMap = {
     Low: 'bg-apteats-sage-light text-apteats-moss-dark',
     Medium: 'bg-apteats-sage text-apteats-charcoal',
     High: 'bg-apteats-moss-light text-apteats-charcoal-light'
+  };
+
+  const handleWorkoutComplete = () => {
+    setIsWorkoutCompleted(true);
+    setIsWorkoutStarted(false);
+    toast.success("Workout completed! 🎉", {
+      description: "Amazing job! You've completed your workout. Keep up the great work!",
+      duration: 5000,
+    });
+  };
+  
+  const startWorkout = () => {
+    if (!locked) {
+      setIsWorkoutStarted(true);
+    }
   };
   
   return (
@@ -108,6 +128,22 @@ const WorkoutCard = ({
           </div>
         )}
         
+        {isWorkoutStarted && !isWorkoutCompleted && (
+          <div className="mb-4">
+            <WorkoutTimer duration={duration} onComplete={handleWorkoutComplete} />
+          </div>
+        )}
+        
+        {isWorkoutCompleted && (
+          <div className="mb-4 p-3 bg-apteats-sage-light/50 rounded-lg text-center">
+            <Heart className="mx-auto mb-2 text-rose-500" size={20} />
+            <p className="text-sm font-medium">Great job! You crushed this workout!</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              You burned approximately {calories} calories
+            </p>
+          </div>
+        )}
+        
         <div className="mb-4 mt-auto">
           <div className="text-xs text-muted-foreground mb-2">Focus Areas</div>
           <div className="flex flex-wrap gap-1">
@@ -120,13 +156,31 @@ const WorkoutCard = ({
         </div>
         
         <div className="flex flex-col gap-2">
-          <Button 
-            variant={locked ? "outline" : "default"} 
-            className="w-full"
-            disabled={locked}
-          >
-            {locked ? "Unlock Workout" : "Start Workout"}
-          </Button>
+          {!isWorkoutStarted && !isWorkoutCompleted ? (
+            <Button 
+              variant={locked ? "outline" : "primary"} 
+              className="w-full"
+              disabled={locked}
+              onClick={startWorkout}
+            >
+              {locked ? "Unlock Workout" : "Start Workout"}
+            </Button>
+          ) : isWorkoutCompleted ? (
+            <Button 
+              variant="primary" 
+              className="w-full"
+              onClick={() => {
+                setIsWorkoutCompleted(false);
+                setIsWorkoutStarted(true);
+              }}
+            >
+              Repeat Workout
+            </Button>
+          ) : (
+            <p className="text-xs text-center text-apteats-moss">
+              Optimal workout time: {duration} minutes
+            </p>
+          )}
           
           {!locked && (
             <button 
@@ -451,6 +505,9 @@ const WorkoutRecommendations = () => {
           <p className="section-subtitle mx-auto animate-on-scroll">
             Our AI creates personalized exercise routines based on your unique body type, fitness level, and goals.
           </p>
+          <p className="text-apteats-moss font-medium mt-4 animate-on-scroll">
+            100% Free — No Payments, No Subscriptions
+          </p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
@@ -469,67 +526,115 @@ const WorkoutRecommendations = () => {
           ))}
         </div>
         
-        <h3 className="text-2xl font-semibold text-center mb-6 animate-on-scroll">Find Your Ideal Workout</h3>
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-2xl font-semibold animate-on-scroll">Find Your Ideal Workout</h3>
+          
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="sm" className="animate-on-scroll">
+                Learn More
+              </Button>
+            </SheetTrigger>
+            <SheetContent className="w-full sm:max-w-md overflow-y-auto">
+              <div className="space-y-6">
+                <h3 className="text-xl font-bold">About Our Workout Program</h3>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-medium mb-2">Personalized Workouts</h4>
+                    <p className="text-muted-foreground text-sm">
+                      Our AI analyzes your body type, fitness level, and goals to create personalized workout plans that maximize results while minimizing injury risk.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-medium mb-2">How to Use the Timer</h4>
+                    <p className="text-muted-foreground text-sm">
+                      When you start a workout, our built-in timer will help you track your progress. You can pause anytime if needed, and you'll receive a motivational message upon completion.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-apteats-sage-light/50 p-4 rounded-lg">
+                    <h4 className="font-medium mb-2 flex items-center">
+                      <Heart size={16} className="text-rose-500 mr-2" />
+                      A Personal Note
+                    </h4>
+                    <p className="text-sm italic">
+                      "Fitness should be accessible to everyone, regardless of their financial situation. That's why I've made all AptEats services completely free. Your health journey matters, and I'm here to support you every step of the way."
+                    </p>
+                    <p className="text-sm font-medium mt-2 text-right">- Raz ❤️</p>
+                  </div>
+                  
+                  <div className="bg-apteats-blue/10 p-4 rounded-lg">
+                    <h4 className="font-medium mb-2">100% Free Forever</h4>
+                    <p className="text-sm">
+                      All workout plans, timers, and progress tracking features are completely free. No premium tiers, no hidden charges, no subscriptions.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
         
         <div className="flex flex-wrap gap-2 md:gap-4 justify-center mb-8">
           <Button 
-            variant={activeFilter === "all" ? "default" : "outline"} 
+            variant={activeFilter === "all" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterWorkouts("all")}
           >
             All Workouts
           </Button>
           <Button 
-            variant={activeFilter === "beginner" ? "default" : "outline"} 
+            variant={activeFilter === "beginner" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterWorkouts("beginner")}
           >
             Beginner
           </Button>
           <Button 
-            variant={activeFilter === "intermediate" ? "default" : "outline"} 
+            variant={activeFilter === "intermediate" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterWorkouts("intermediate")}
           >
             Intermediate
           </Button>
           <Button 
-            variant={activeFilter === "advanced" ? "default" : "outline"} 
+            variant={activeFilter === "advanced" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterWorkouts("advanced")}
           >
             Advanced
           </Button>
           <Button 
-            variant={activeFilter === "strength" ? "default" : "outline"} 
+            variant={activeFilter === "strength" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterWorkouts("strength")}
           >
             Strength
           </Button>
           <Button 
-            variant={activeFilter === "cardio" ? "default" : "outline"} 
+            variant={activeFilter === "cardio" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterWorkouts("cardio")}
           >
             Cardio
           </Button>
           <Button 
-            variant={activeFilter === "low" ? "default" : "outline"} 
+            variant={activeFilter === "low" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterWorkouts("low")}
           >
             Low Impact
           </Button>
           <Button 
-            variant={activeFilter === "high" ? "default" : "outline"} 
+            variant={activeFilter === "high" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterWorkouts("high")}
           >
             High Intensity
           </Button>
           <Button 
-            variant={activeFilter === "quick" ? "default" : "outline"} 
+            variant={activeFilter === "quick" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterWorkouts("quick")}
           >

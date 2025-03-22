@@ -4,7 +4,11 @@ import { cn } from '@/lib/utils';
 import Button from '../shared/Button';
 import { Menu, X } from 'lucide-react';
 
-const Navbar = () => {
+interface NavbarProps {
+  scrollToCalculator: () => void;
+}
+
+const Navbar = ({ scrollToCalculator }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -41,7 +45,7 @@ const Navbar = () => {
           <a href="#calculator" className="text-muted-foreground hover:text-foreground transition-colors duration-300">Calculator</a>
           <a href="#nutrition" className="text-muted-foreground hover:text-foreground transition-colors duration-300">Nutrition</a>
           <a href="#workouts" className="text-muted-foreground hover:text-foreground transition-colors duration-300">Workouts</a>
-          <Button variant="primary" size="sm">Get Started</Button>
+          <Button variant="primary" size="sm" onClick={scrollToCalculator}>Get Started</Button>
         </div>
 
         {/* Mobile Navigation Toggle */}
@@ -91,7 +95,10 @@ const Navbar = () => {
             <Button 
               variant="primary" 
               className="w-full mt-4"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                scrollToCalculator();
+              }}
             >
               Get Started
             </Button>

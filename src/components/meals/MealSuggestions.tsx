@@ -14,6 +14,8 @@ import {
   Wheat, 
   Egg 
 } from 'lucide-react';
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { toast } from "sonner";
 
 interface Nutrient {
   name: string;
@@ -328,9 +330,40 @@ const allMeals = [
   }
 ];
 
+// Daily meal plan data
+const initialDailyMealPlan = [
+  { meal: "Breakfast", food: "Greek Yogurt with Berries", calories: 320, protein: 22 },
+  { meal: "Lunch", food: "Grilled Chicken Salad", calories: 450, protein: 35 },
+  { meal: "Snack", food: "Protein Shake with Almonds", calories: 250, protein: 20 },
+  { meal: "Dinner", food: "Salmon with Roasted Vegetables", calories: 520, protein: 30 }
+];
+
+const mealPlanOptions = [
+  [
+    { meal: "Breakfast", food: "Avocado Toast with Egg", calories: 380, protein: 18 },
+    { meal: "Lunch", food: "Mediterranean Bowl", calories: 480, protein: 18 },
+    { meal: "Snack", food: "Cottage Cheese & Fruit", calories: 180, protein: 22 },
+    { meal: "Dinner", food: "Grass-Fed Beef Stir Fry", calories: 410, protein: 32 }
+  ],
+  [
+    { meal: "Breakfast", food: "Protein Smoothie Bowl", calories: 390, protein: 30 },
+    { meal: "Lunch", food: "Salmon Poke Bowl", calories: 520, protein: 32 },
+    { meal: "Snack", food: "Protein Energy Bites", calories: 210, protein: 12 },
+    { meal: "Dinner", food: "Lentil & Vegetable Curry", calories: 380, protein: 18 }
+  ],
+  [
+    { meal: "Breakfast", food: "Greek Yogurt Parfait", calories: 320, protein: 22 },
+    { meal: "Lunch", food: "Grilled Chicken Bowl", calories: 450, protein: 35 },
+    { meal: "Snack", food: "Vegetable Crudité with Hummus", calories: 160, protein: 6 },
+    { meal: "Dinner", food: "Salmon with Sweet Potato", calories: 520, protein: 28 }
+  ]
+];
+
 const MealSuggestions = () => {
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [displayedMeals, setDisplayedMeals] = useState(allMeals.slice(0, 8));
+  const [dailyMealPlan, setDailyMealPlan] = useState(initialDailyMealPlan);
+  const [showLearnMore, setShowLearnMore] = useState(false);
   
   const filterMeals = (filter: string) => {
     let filteredMeals = allMeals;
@@ -359,6 +392,18 @@ const MealSuggestions = () => {
     setDisplayedMeals(shuffled.slice(0, 8));
   };
   
+  const refreshMealPlan = () => {
+    const randomIndex = Math.floor(Math.random() * mealPlanOptions.length);
+    setDailyMealPlan(mealPlanOptions[randomIndex]);
+    toast.success("Meal plan refreshed!", {
+      description: "Your daily meal plan has been updated with new options."
+    });
+  };
+
+  // Calculate totals for meal plan
+  const totalCalories = dailyMealPlan.reduce((sum, meal) => sum + meal.calories, 0);
+  const totalProtein = dailyMealPlan.reduce((sum, meal) => sum + meal.protein, 0);
+  
   return (
     <section id="nutrition" className="py-24 relative">
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-apteats-sage-light/40 -z-10"></div>
@@ -372,6 +417,9 @@ const MealSuggestions = () => {
           <h2 className="section-title animate-on-scroll">Personalized Nutrition, Tailored to Your Goals</h2>
           <p className="section-subtitle mx-auto animate-on-scroll">
             Our AI analyzes your calorie needs, dietary preferences, and nutritional gaps to create the perfect meal plan for your unique body.
+          </p>
+          <p className="text-apteats-moss font-medium mt-4 animate-on-scroll">
+            100% Free — No Payments, No Subscriptions
           </p>
         </div>
         
@@ -398,24 +446,68 @@ const MealSuggestions = () => {
                     </li>
                   ))}
                 </ul>
+                
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="primary" className="mt-6">
+                      Learn More
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent className="w-full sm:max-w-md overflow-y-auto">
+                    <div className="space-y-6">
+                      <h3 className="text-xl font-bold">Welcome to AptEats</h3>
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-medium mb-2">What We Do</h4>
+                          <p className="text-muted-foreground text-sm">
+                            AptEats is your AI-powered nutrition and fitness companion. We help you calculate your calorie needs, generate personalized meal plans, and recommend workouts tailored to your body type and goals.
+                          </p>
+                        </div>
+                        
+                        <div>
+                          <h4 className="font-medium mb-2">Building a Healthier Lifestyle</h4>
+                          <p className="text-muted-foreground text-sm">
+                            Our platform takes the guesswork out of nutrition and fitness. We believe in sustainable lifestyle changes rather than quick fixes, helping you develop healthy habits that last a lifetime.
+                          </p>
+                        </div>
+                        
+                        <div className="bg-apteats-sage-light/50 p-4 rounded-lg">
+                          <h4 className="font-medium mb-2 flex items-center">
+                            <Heart size={16} className="text-rose-500 mr-2" />
+                            A Personal Note
+                          </h4>
+                          <p className="text-sm italic">
+                            "Thank you for using AptEats. I created this platform to help everyone access personalized nutrition and fitness guidance. My mission is to make health and wellness accessible to all, which is why all our services are completely free. I'm sending you love and health from my heart to yours."
+                          </p>
+                          <p className="text-sm font-medium mt-2 text-right">- Raz ❤️</p>
+                        </div>
+                        
+                        <div className="bg-apteats-blue/10 p-4 rounded-lg">
+                          <h4 className="font-medium mb-2">100% Free Forever</h4>
+                          <p className="text-sm">
+                            All services provided by AptEats are completely free. No premium tiers, no hidden charges, no subscriptions. Quality nutrition and fitness guidance should be accessible to everyone.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </SheetContent>
+                </Sheet>
               </div>
               
               <div className="w-full md:w-1/2 bg-gradient-sage p-6 rounded-xl">
                 <div className="flex justify-between items-center mb-4">
                   <h4 className="font-medium">Your Daily Meal Plan</h4>
-                  <button className="flex items-center text-sm text-apteats-moss">
+                  <button 
+                    className="flex items-center text-sm text-apteats-moss"
+                    onClick={refreshMealPlan}
+                  >
                     <Shuffle size={14} className="mr-1" />
                     <span>Refresh</span>
                   </button>
                 </div>
                 
                 <div className="space-y-4">
-                  {[
-                    { meal: "Breakfast", food: "Greek Yogurt with Berries", calories: 320, protein: 22 },
-                    { meal: "Lunch", food: "Grilled Chicken Salad", calories: 450, protein: 35 },
-                    { meal: "Snack", food: "Protein Shake with Almonds", calories: 250, protein: 20 },
-                    { meal: "Dinner", food: "Salmon with Roasted Vegetables", calories: 520, protein: 30 }
-                  ].map((item, i) => (
+                  {dailyMealPlan.map((item, i) => (
                     <div key={i} className="flex justify-between p-3 bg-white/80 rounded-lg">
                       <div>
                         <div className="text-xs text-muted-foreground">{item.meal}</div>
@@ -431,7 +523,7 @@ const MealSuggestions = () => {
                   <div className="pt-2 border-t border-border mt-4">
                     <div className="flex justify-between text-sm">
                       <span className="font-medium">Daily Total</span>
-                      <span>1,540 kcal / 107g protein</span>
+                      <span>{totalCalories} kcal / {totalProtein}g protein</span>
                     </div>
                   </div>
                 </div>
@@ -442,63 +534,63 @@ const MealSuggestions = () => {
         
         <div className="flex flex-wrap gap-2 md:gap-4 justify-center mb-8">
           <Button 
-            variant={activeFilter === "all" ? "default" : "outline"} 
+            variant={activeFilter === "all" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterMeals("all")}
           >
             All Meals
           </Button>
           <Button 
-            variant={activeFilter === "breakfast" ? "default" : "outline"} 
+            variant={activeFilter === "breakfast" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterMeals("breakfast")}
           >
             Breakfast
           </Button>
           <Button 
-            variant={activeFilter === "lunch" ? "default" : "outline"} 
+            variant={activeFilter === "lunch" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterMeals("lunch")}
           >
             Lunch
           </Button>
           <Button 
-            variant={activeFilter === "dinner" ? "default" : "outline"} 
+            variant={activeFilter === "dinner" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterMeals("dinner")}
           >
             Dinner
           </Button>
           <Button 
-            variant={activeFilter === "snack" ? "default" : "outline"} 
+            variant={activeFilter === "snack" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterMeals("snack")}
           >
             Snacks
           </Button>
           <Button 
-            variant={activeFilter === "high-protein" ? "default" : "outline"} 
+            variant={activeFilter === "high-protein" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterMeals("high-protein")}
           >
             High Protein
           </Button>
           <Button 
-            variant={activeFilter === "low-carb" ? "default" : "outline"} 
+            variant={activeFilter === "low-carb" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterMeals("low-carb")}
           >
             Low Carb
           </Button>
           <Button 
-            variant={activeFilter === "plant-based" ? "default" : "outline"} 
+            variant={activeFilter === "plant-based" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterMeals("plant-based")}
           >
             Plant-Based
           </Button>
           <Button 
-            variant={activeFilter === "quick" ? "default" : "outline"} 
+            variant={activeFilter === "quick" ? "primary" : "outline"} 
             size="sm" 
             onClick={() => filterMeals("quick")}
           >

@@ -3,7 +3,11 @@ import React, { useEffect, useState } from 'react';
 import Button from '../shared/Button';
 import { ArrowDown } from 'lucide-react';
 
-const HeroSection = () => {
+interface HeroSectionProps {
+  scrollToCalculator: () => void;
+}
+
+const HeroSection = ({ scrollToCalculator }: HeroSectionProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -30,9 +34,12 @@ const HeroSection = () => {
               <p className="text-xl text-muted-foreground max-w-2xl">
                 Track calories, get personalized meal plans, and optimize workouts—effortlessly. Your AI nutritionist and personal trainer in one elegant app.
               </p>
+              <p className="text-apteats-moss font-medium">
+                100% Free — No Payments, No Subscriptions
+              </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Button size="lg">Get Started</Button>
-                <Button variant="outline" size="lg">Learn More</Button>
+                <Button size="lg" onClick={scrollToCalculator}>Get Started</Button>
+                <Button variant="outline" size="lg" onClick={scrollToCalculator}>Learn More</Button>
               </div>
             </div>
           </div>
@@ -96,9 +103,9 @@ const HeroSection = () => {
         
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <a href="#calculator" aria-label="Scroll to calculator section">
+          <button onClick={scrollToCalculator} aria-label="Scroll to calculator section">
             <ArrowDown className="text-muted-foreground" />
-          </a>
+          </button>
         </div>
       </div>
     </section>
