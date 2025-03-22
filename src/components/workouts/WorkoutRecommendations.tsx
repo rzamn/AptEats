@@ -1,8 +1,21 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Card from '../shared/Card';
 import Button from '../shared/Button';
-import { Activity, Dumbbell, Flame, Lock, Timer, TrendingUp } from 'lucide-react';
+import { 
+  Activity, 
+  Clock, 
+  Dumbbell, 
+  Flame, 
+  Lock, 
+  Timer, 
+  TrendingUp, 
+  Heart, 
+  Filter, 
+  Shuffle,
+  Brain, 
+  Zap
+} from 'lucide-react';
 
 interface WorkoutCardProps {
   title: string;
@@ -12,18 +25,33 @@ interface WorkoutCardProps {
   calories: number;
   bodyFocus: string[];
   color: string;
+  workoutType: string;
+  benefits: string[];
   locked?: boolean;
 }
 
-const WorkoutCard = ({ title, level, duration, intensity, calories, bodyFocus, color, locked = false }: WorkoutCardProps) => {
+const WorkoutCard = ({ 
+  title, 
+  level, 
+  duration, 
+  intensity, 
+  calories, 
+  bodyFocus, 
+  color, 
+  workoutType, 
+  benefits, 
+  locked = false 
+}: WorkoutCardProps) => {
+  const [showDetails, setShowDetails] = useState(false);
+  
   const intensityMap = {
-    Low: 'bg-green-100 text-green-800',
-    Medium: 'bg-amber-100 text-amber-800',
-    High: 'bg-red-100 text-red-800'
+    Low: 'bg-apteats-sage-light text-apteats-moss-dark',
+    Medium: 'bg-apteats-sage text-apteats-charcoal',
+    High: 'bg-apteats-moss-light text-apteats-charcoal-light'
   };
   
   return (
-    <Card className="overflow-hidden h-full">
+    <Card className="overflow-hidden h-full flex flex-col">
       <div 
         className="h-24 relative" 
         style={{ backgroundColor: color }}
@@ -37,73 +65,161 @@ const WorkoutCard = ({ title, level, duration, intensity, calories, bodyFocus, c
           </div>
         )}
       </div>
-      <div className="p-5">
+      <div className="p-5 flex flex-col flex-grow">
         <h3 className="font-semibold text-lg mb-2">{title}</h3>
         <div className="flex flex-wrap gap-2 mb-4">
-          <span className="text-xs px-2 py-1 bg-secondary rounded-full">
+          <span className="text-xs px-2 py-1 bg-apteats-neutral-light rounded-full">
             {level}
           </span>
           <span className={`text-xs px-2 py-1 rounded-full ${intensityMap[intensity]}`}>
             {intensity} Intensity
           </span>
+          <span className="text-xs px-2 py-1 bg-apteats-neutral-light rounded-full">
+            {workoutType}
+          </span>
         </div>
         
         <div className="grid grid-cols-3 gap-2 mb-4">
-          <div className="text-center p-2 bg-secondary rounded-lg">
+          <div className="text-center p-2 bg-apteats-neutral-light rounded-lg">
             <Timer size={16} className="mx-auto mb-1" />
             <span className="text-xs block">{duration} min</span>
           </div>
-          <div className="text-center p-2 bg-secondary rounded-lg">
+          <div className="text-center p-2 bg-apteats-neutral-light rounded-lg">
             <Flame size={16} className="mx-auto mb-1" />
             <span className="text-xs block">{calories} kcal</span>
           </div>
-          <div className="text-center p-2 bg-secondary rounded-lg">
+          <div className="text-center p-2 bg-apteats-neutral-light rounded-lg">
             <TrendingUp size={16} className="mx-auto mb-1" />
-            <span className="text-xs block">Strength</span>
+            <span className="text-xs block">{bodyFocus[0]}</span>
           </div>
         </div>
         
-        <div className="mb-4">
+        {showDetails && (
+          <div className="mb-4">
+            <div className="text-xs text-muted-foreground mb-2">Key Benefits</div>
+            <ul className="space-y-1">
+              {benefits.map((benefit, index) => (
+                <li key={index} className="text-xs flex">
+                  <Zap size={12} className="text-apteats-moss mr-1 mt-0.5 flex-shrink-0" />
+                  <span>{benefit}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        
+        <div className="mb-4 mt-auto">
           <div className="text-xs text-muted-foreground mb-2">Focus Areas</div>
           <div className="flex flex-wrap gap-1">
             {bodyFocus.map((area, index) => (
-              <span key={index} className="text-xs px-2 py-1 border border-border rounded-full">
+              <span key={index} className="text-xs px-2 py-1 border border-apteats-neutral-dark rounded-full">
                 {area}
               </span>
             ))}
           </div>
         </div>
         
-        <Button 
-          variant={locked ? "outline" : "primary"} 
-          className="w-full"
-          disabled={locked}
-        >
-          {locked ? "Unlock Workout" : "Start Workout"}
-        </Button>
+        <div className="flex flex-col gap-2">
+          <Button 
+            variant={locked ? "outline" : "default"} 
+            className="w-full"
+            disabled={locked}
+          >
+            {locked ? "Unlock Workout" : "Start Workout"}
+          </Button>
+          
+          {!locked && (
+            <button 
+              onClick={() => setShowDetails(!showDetails)} 
+              className="text-xs text-apteats-moss underline text-center"
+            >
+              {showDetails ? 'Hide details' : 'Show workout details'}
+            </button>
+          )}
+        </div>
       </div>
     </Card>
   );
 };
 
-const workoutData = [
+const allWorkouts = [
+  // Beginner workouts
   {
-    title: "Full Body Strength",
+    title: "Full Body Foundations",
     level: "Beginner",
     duration: 30,
-    intensity: "Medium" as const,
-    calories: 250,
-    bodyFocus: ["Full Body", "Strength"],
-    color: "#3B82F6"
+    intensity: "Low" as const,
+    calories: 180,
+    bodyFocus: ["Full Body", "Strength", "Mobility"],
+    color: "#E4EBE0",
+    workoutType: "Strength",
+    benefits: [
+      "Builds basic strength in all major muscle groups",
+      "Improves coordination and movement patterns",
+      "Perfect for those new to fitness"
+    ]
   },
+  {
+    title: "Gentle Cardio Flow",
+    level: "Beginner",
+    duration: 25,
+    intensity: "Low" as const,
+    calories: 150,
+    bodyFocus: ["Cardio", "Endurance", "Mobility"],
+    color: "#D1DCCC",
+    workoutType: "Cardio",
+    benefits: [
+      "Gradually builds cardiovascular endurance",
+      "Minimal impact on joints",
+      "Improves overall stamina"
+    ]
+  },
+  {
+    title: "Beginner Core Strength",
+    level: "Beginner",
+    duration: 15,
+    intensity: "Low" as const,
+    calories: 110,
+    bodyFocus: ["Core", "Posture", "Stability"],
+    color: "#A3B598",
+    workoutType: "Core",
+    benefits: [
+      "Develops essential core strength",
+      "Improves posture and spinal alignment",
+      "Reduces risk of lower back pain"
+    ]
+  },
+  {
+    title: "Intro to Mobility",
+    level: "Beginner",
+    duration: 20,
+    intensity: "Low" as const,
+    calories: 90,
+    bodyFocus: ["Flexibility", "Recovery", "Joint Health"],
+    color: "#B3C1AC",
+    workoutType: "Mobility",
+    benefits: [
+      "Increases range of motion in key joints",
+      "Reduces stiffness and tension",
+      "Prepares the body for more intense training"
+    ]
+  },
+  
+  // Intermediate workouts
   {
     title: "HIIT Cardio Blast",
     level: "Intermediate",
     duration: 20,
     intensity: "High" as const,
     calories: 300,
-    bodyFocus: ["Cardio", "Fat Loss"],
-    color: "#F97316"
+    bodyFocus: ["Cardio", "Fat Loss", "Full Body"],
+    color: "#8EA382",
+    workoutType: "HIIT",
+    benefits: [
+      "Maximizes calorie burn in minimal time",
+      "Improves VO2 max and cardiovascular health",
+      "Continues burning calories post-workout"
+    ]
   },
   {
     title: "Upper Body Focus",
@@ -111,19 +227,156 @@ const workoutData = [
     duration: 40,
     intensity: "Medium" as const,
     calories: 280,
-    bodyFocus: ["Arms", "Chest", "Back"],
-    color: "#10B981",
-    locked: true
+    bodyFocus: ["Arms", "Chest", "Back", "Shoulders"],
+    color: "#B3C1AC",
+    workoutType: "Strength",
+    benefits: [
+      "Builds functional upper body strength",
+      "Improves pushing and pulling capabilities",
+      "Enhances posture and shoulder stability"
+    ]
   },
   {
     title: "Lower Body & Core",
-    level: "Beginner",
+    level: "Intermediate",
     duration: 35,
-    intensity: "Low" as const,
-    calories: 220,
+    intensity: "Medium" as const,
+    calories: 260,
     bodyFocus: ["Legs", "Glutes", "Core"],
-    color: "#A855F7",
+    color: "#A3B598",
+    workoutType: "Strength",
+    benefits: [
+      "Develops strong legs and glutes",
+      "Improves core stability and balance",
+      "Enhances athletic performance"
+    ]
+  },
+  {
+    title: "Metabolic Circuit",
+    level: "Intermediate",
+    duration: 30,
+    intensity: "Medium" as const,
+    calories: 320,
+    bodyFocus: ["Full Body", "Endurance", "Metabolism"],
+    color: "#D1DCCC",
+    workoutType: "Circuit",
+    benefits: [
+      "Boosts metabolic rate",
+      "Combines strength and cardio benefits",
+      "Efficient full-body workout"
+    ]
+  },
+  
+  // Advanced workouts
+  {
+    title: "Power & Explosiveness",
+    level: "Advanced",
+    duration: 45,
+    intensity: "High" as const,
+    calories: 450,
+    bodyFocus: ["Power", "Athleticism", "Full Body"],
+    color: "#8EA382",
+    workoutType: "Plyometric",
+    benefits: [
+      "Develops explosive power and speed",
+      "Increases athletic performance",
+      "Maximizes fast-twitch muscle fiber recruitment"
+    ],
     locked: true
+  },
+  {
+    title: "Advanced Strength Training",
+    level: "Advanced",
+    duration: 50,
+    intensity: "High" as const,
+    calories: 400,
+    bodyFocus: ["Strength", "Muscle Building", "Full Body"],
+    color: "#B3C1AC",
+    workoutType: "Strength",
+    benefits: [
+      "Progressive overload for maximum strength gains",
+      "Complex compound movements",
+      "Periodized approach to prevent plateaus"
+    ],
+    locked: true
+  },
+  {
+    title: "Endurance Challenge",
+    level: "Advanced",
+    duration: 60,
+    intensity: "High" as const,
+    calories: 520,
+    bodyFocus: ["Endurance", "Mental Toughness", "Full Body"],
+    color: "#A3B598",
+    workoutType: "Endurance",
+    benefits: [
+      "Builds cardiovascular and muscular endurance",
+      "Improves lactate threshold",
+      "Enhances mental resilience"
+    ],
+    locked: true
+  },
+  
+  // Specialized workouts
+  {
+    title: "Stress Relief Yoga",
+    level: "All Levels",
+    duration: 30,
+    intensity: "Low" as const,
+    calories: 120,
+    bodyFocus: ["Flexibility", "Stress Reduction", "Balance"],
+    color: "#E4EBE0",
+    workoutType: "Yoga",
+    benefits: [
+      "Reduces cortisol levels and stress",
+      "Improves mind-body connection",
+      "Enhances flexibility and balance"
+    ]
+  },
+  {
+    title: "Office Break Stretches",
+    level: "All Levels",
+    duration: 10,
+    intensity: "Low" as const,
+    calories: 40,
+    bodyFocus: ["Mobility", "Posture", "Recovery"],
+    color: "#D1DCCC",
+    workoutType: "Mobility",
+    benefits: [
+      "Counteracts effects of prolonged sitting",
+      "Relieves tension in neck, shoulders and back",
+      "Can be done anywhere with no equipment"
+    ]
+  },
+  {
+    title: "Mindful Movement",
+    level: "All Levels",
+    duration: 25,
+    intensity: "Low" as const,
+    calories: 100,
+    bodyFocus: ["Mind-Body", "Balance", "Coordination"],
+    color: "#B3C1AC",
+    workoutType: "Movement",
+    benefits: [
+      "Improves body awareness and proprioception",
+      "Enhances focus and concentration",
+      "Reduces anxiety and promotes well-being"
+    ]
+  },
+  {
+    title: "Recovery & Mobility",
+    level: "All Levels",
+    duration: 30,
+    intensity: "Low" as const,
+    calories: 80,
+    bodyFocus: ["Recovery", "Flexibility", "Joint Health"],
+    color: "#A3B598",
+    workoutType: "Recovery",
+    benefits: [
+      "Accelerates recovery between intense workouts",
+      "Reduces muscle soreness and stiffness",
+      "Improves overall movement quality"
+    ]
   }
 ];
 
@@ -149,14 +402,49 @@ const bodyTypes = [
 ];
 
 const WorkoutRecommendations = () => {
+  const [activeFilter, setActiveFilter] = useState<string>("all");
+  const [displayedWorkouts, setDisplayedWorkouts] = useState(allWorkouts.slice(0, 8));
+  
+  const filterWorkouts = (filter: string) => {
+    let filteredWorkouts = allWorkouts;
+    
+    if (filter !== "all") {
+      if (filter === "beginner") {
+        filteredWorkouts = allWorkouts.filter(workout => workout.level === "Beginner");
+      } else if (filter === "intermediate") {
+        filteredWorkouts = allWorkouts.filter(workout => workout.level === "Intermediate");
+      } else if (filter === "advanced") {
+        filteredWorkouts = allWorkouts.filter(workout => workout.level === "Advanced");
+      } else if (filter === "low") {
+        filteredWorkouts = allWorkouts.filter(workout => workout.intensity === "Low");
+      } else if (filter === "medium") {
+        filteredWorkouts = allWorkouts.filter(workout => workout.intensity === "Medium");
+      } else if (filter === "high") {
+        filteredWorkouts = allWorkouts.filter(workout => workout.intensity === "High");
+      } else if (filter === "quick") {
+        filteredWorkouts = allWorkouts.filter(workout => workout.duration <= 30);
+      } else {
+        filteredWorkouts = allWorkouts.filter(workout => workout.workoutType.toLowerCase() === filter);
+      }
+    }
+    
+    setDisplayedWorkouts(filteredWorkouts.slice(0, 8));
+    setActiveFilter(filter);
+  };
+  
+  const shuffleWorkouts = () => {
+    const shuffled = [...allWorkouts].sort(() => 0.5 - Math.random());
+    setDisplayedWorkouts(shuffled.slice(0, 8));
+  };
+  
   return (
     <section id="workouts" className="py-24 relative">
       {/* Background elements */}
-      <div className="absolute top-0 right-0 w-full h-64 bg-gradient-to-b from-apteats-blue/20 to-transparent -z-10"></div>
+      <div className="absolute top-0 right-0 w-full h-64 bg-gradient-to-b from-apteats-sage-light/40 to-transparent -z-10"></div>
       
       <div className="section-container">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <span className="inline-block px-4 py-2 rounded-full bg-apteats-blue text-apteats-blue-dark text-sm font-medium mb-4 animate-on-scroll">
+          <span className="inline-block px-4 py-2 rounded-full bg-apteats-sage-light text-apteats-moss-dark text-sm font-medium mb-4 animate-on-scroll">
             AI Workout Planning
           </span>
           <h2 className="section-title animate-on-scroll">Workouts Designed for Your Body Type</h2>
@@ -168,12 +456,12 @@ const WorkoutRecommendations = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {bodyTypes.map((body, index) => (
             <Card key={index} className="p-6 h-full animate-on-scroll" style={{ animationDelay: `${index * 0.1}s` }}>
-              <div className="h-12 w-12 bg-apteats-blue/30 rounded-full flex items-center justify-center mb-4">
+              <div className="h-12 w-12 bg-apteats-sage-light rounded-full flex items-center justify-center mb-4">
                 {body.icon}
               </div>
               <h3 className="text-xl font-semibold mb-2">{body.type}</h3>
               <p className="text-sm text-muted-foreground mb-4">{body.description}</p>
-              <div className="bg-secondary p-4 rounded-lg text-sm">
+              <div className="bg-apteats-neutral-light p-4 rounded-lg text-sm">
                 <span className="font-medium">AI Recommendation:</span>
                 <p className="mt-1">{body.recommendation}</p>
               </div>
@@ -181,10 +469,84 @@ const WorkoutRecommendations = () => {
           ))}
         </div>
         
-        <h3 className="text-2xl font-semibold text-center mb-8 animate-on-scroll">Recommended Workouts For You</h3>
+        <h3 className="text-2xl font-semibold text-center mb-6 animate-on-scroll">Find Your Ideal Workout</h3>
+        
+        <div className="flex flex-wrap gap-2 md:gap-4 justify-center mb-8">
+          <Button 
+            variant={activeFilter === "all" ? "default" : "outline"} 
+            size="sm" 
+            onClick={() => filterWorkouts("all")}
+          >
+            All Workouts
+          </Button>
+          <Button 
+            variant={activeFilter === "beginner" ? "default" : "outline"} 
+            size="sm" 
+            onClick={() => filterWorkouts("beginner")}
+          >
+            Beginner
+          </Button>
+          <Button 
+            variant={activeFilter === "intermediate" ? "default" : "outline"} 
+            size="sm" 
+            onClick={() => filterWorkouts("intermediate")}
+          >
+            Intermediate
+          </Button>
+          <Button 
+            variant={activeFilter === "advanced" ? "default" : "outline"} 
+            size="sm" 
+            onClick={() => filterWorkouts("advanced")}
+          >
+            Advanced
+          </Button>
+          <Button 
+            variant={activeFilter === "strength" ? "default" : "outline"} 
+            size="sm" 
+            onClick={() => filterWorkouts("strength")}
+          >
+            Strength
+          </Button>
+          <Button 
+            variant={activeFilter === "cardio" ? "default" : "outline"} 
+            size="sm" 
+            onClick={() => filterWorkouts("cardio")}
+          >
+            Cardio
+          </Button>
+          <Button 
+            variant={activeFilter === "low" ? "default" : "outline"} 
+            size="sm" 
+            onClick={() => filterWorkouts("low")}
+          >
+            Low Impact
+          </Button>
+          <Button 
+            variant={activeFilter === "high" ? "default" : "outline"} 
+            size="sm" 
+            onClick={() => filterWorkouts("high")}
+          >
+            High Intensity
+          </Button>
+          <Button 
+            variant={activeFilter === "quick" ? "default" : "outline"} 
+            size="sm" 
+            onClick={() => filterWorkouts("quick")}
+          >
+            Quick (≤30 min)
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={shuffleWorkouts}
+          >
+            <Shuffle size={14} className="mr-1" />
+            Shuffle
+          </Button>
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {workoutData.map((workout, index) => (
+          {displayedWorkouts.map((workout, index) => (
             <div key={index} className="animate-on-scroll" style={{ animationDelay: `${index * 0.1}s` }}>
               <WorkoutCard {...workout} />
             </div>

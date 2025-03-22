@@ -7,33 +7,33 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 222 47% 11%;
+    --background: 82 10% 98%;
+    --foreground: 150 6% 20%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 150 6% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 150 6% 20%;
 
-    --primary: 210 100% 50%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 102 15% 57%;
+    --primary-foreground: 82 10% 98%;
 
-    --secondary: 210 20% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 82 20% 90%;
+    --secondary-foreground: 150 6% 20%;
 
-    --muted: 210 20% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 82 10% 92%;
+    --muted-foreground: 150 6% 40%;
 
-    --accent: 210 20% 96%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 102 15% 57%;
+    --accent-foreground: 82 10% 98%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 82 10% 98%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 222 84% 48%;
+    --border: 82 10% 85%;
+    --input: 82 10% 85%;
+    --ring: 102 15% 57%;
 
     --radius: 0.75rem;
 
@@ -98,7 +98,7 @@
 @layer components {
   /* Glass effect components */
   .glass-panel {
-    @apply bg-white bg-opacity-70 backdrop-blur-lg rounded-2xl border border-gray-100;
+    @apply bg-white bg-opacity-70 backdrop-blur-lg rounded-2xl border border-apteats-neutral-dark;
   }
   
   .glass-card {

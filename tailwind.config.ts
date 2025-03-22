@@ -64,15 +64,19 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				apteats: {
-					'blue': '#E5F3FF',
-					'blue-dark': '#3B82F6',
-					'green': '#ECFDF3',
-					'green-dark': '#10B981',
-					'gray-light': '#F7F9FB',
-					'gray-medium': '#E5E7EB',
-					'gray-dark': '#6B7280',
-					'text': '#1F2937',
-					'text-light': '#4B5563',
+					'neutral': '#F6F8F5',
+					'neutral-light': '#FBFBF9',
+					'neutral-dark': '#E8EBE4',
+					'sage': '#D1DCCC',
+					'sage-light': '#E4EBE0',
+					'sage-dark': '#B3C1AC',
+					'moss': '#8EA382',
+					'moss-light': '#A3B598',
+					'moss-dark': '#738A68',
+					'charcoal': '#2E3633',
+					'charcoal-light': '#4F5854',
+					'text': '#333333',
+					'text-light': '#666666',
 				}
 			},
 			borderRadius: {
@@ -134,8 +138,8 @@ export default {
 			},
 			backgroundImage: {
 				'gradient-soft': 'linear-gradient(to right, #F7F8FA, #FFFFFF)',
-				'gradient-blue': 'linear-gradient(135deg, #E5F3FF 0%, #F7F9FB 100%)',
-				'gradient-green': 'linear-gradient(135deg, #ECFDF3 0%, #F7F9FB 100%)',
+				'gradient-sage': 'linear-gradient(135deg, #E4EBE0 0%, #FBFBF9 100%)',
+				'gradient-moss': 'linear-gradient(135deg, #A3B598 0%, #E4EBE0 100%)',
 			}
 		}
 	},
