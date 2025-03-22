@@ -1,6 +1,6 @@
 
 import { cn } from '@/lib/utils';
-import React from 'react';
+import React, { CSSProperties } from 'react';
 
 interface CardProps {
   className?: string;
@@ -8,6 +8,7 @@ interface CardProps {
   children: React.ReactNode;
   onClick?: () => void;
   hoverEffect?: boolean;
+  style?: CSSProperties;
 }
 
 const Card: React.FC<CardProps> = ({ 
@@ -15,7 +16,8 @@ const Card: React.FC<CardProps> = ({
   variant = 'default', 
   children, 
   onClick,
-  hoverEffect = true 
+  hoverEffect = true,
+  style
 }) => {
   const baseStyles = 'rounded-2xl overflow-hidden transition-all duration-300';
   
@@ -38,6 +40,7 @@ const Card: React.FC<CardProps> = ({
         className
       )}
       onClick={onClick}
+      style={style}
     >
       {children}
     </div>

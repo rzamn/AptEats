@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import Card from '../shared/Card';
 import Button from '../shared/Button';
-import { ArrowRight, Calculate } from 'lucide-react';
+import { ArrowRight, Calculator } from 'lucide-react';
 
 type ActivityLevel = 'sedentary' | 'light' | 'moderate' | 'active' | 'very-active';
 type Goal = 'lose' | 'maintain' | 'gain';
@@ -63,7 +62,6 @@ const CalorieCalculator = () => {
     
     if (!age || !weight || !height) return;
     
-    // BMR calculation using Mifflin-St Jeor Equation
     let bmr;
     if (gender === 'male') {
       bmr = 10 * Number(weight) + 6.25 * Number(height) - 5 * Number(age) + 5;
@@ -71,7 +69,6 @@ const CalorieCalculator = () => {
       bmr = 10 * Number(weight) + 6.25 * Number(height) - 5 * Number(age) - 161;
     }
     
-    // Activity multiplier
     const activityMultipliers = {
       sedentary: 1.2,
       light: 1.375,
@@ -82,14 +79,13 @@ const CalorieCalculator = () => {
     
     const tdee = bmr * activityMultipliers[activityLevel];
     
-    // Goal adjustment
     let calorieNeeds;
     if (goal === 'lose') {
-      calorieNeeds = tdee - 500; // 500 calorie deficit
+      calorieNeeds = tdee - 500;
     } else if (goal === 'gain') {
-      calorieNeeds = tdee + 500; // 500 calorie surplus
+      calorieNeeds = tdee + 500;
     } else {
-      calorieNeeds = tdee; // Maintenance
+      calorieNeeds = tdee;
     }
     
     setResult(Math.round(calorieNeeds));
@@ -97,7 +93,6 @@ const CalorieCalculator = () => {
   
   return (
     <section id="calculator" className="py-24 relative">
-      {/* Background elements */}
       <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-apteats-blue/30 to-transparent -z-10"></div>
       
       <div className="section-container">
@@ -238,7 +233,7 @@ const CalorieCalculator = () => {
                 <Button 
                   onClick={calculateCalories} 
                   className="w-full" 
-                  icon={<Calculate size={18} />}
+                  icon={<Calculator size={18} />}
                 >
                   Calculate Daily Calories
                 </Button>
