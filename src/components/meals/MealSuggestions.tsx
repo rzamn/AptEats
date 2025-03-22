@@ -128,9 +128,7 @@ const MealCard = ({
   );
 };
 
-// Expanded meal database with varied options and images
 const allMeals = [
-  // Breakfast options
   {
     title: "Greek Yogurt Parfait",
     description: "Greek yogurt with berries, honey, and homemade granola",
@@ -186,7 +184,6 @@ const allMeals = [
     imageUrl: "https://images.unsplash.com/photo-1546039907-7fa05f864c02?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
   },
   
-  // Lunch options
   {
     title: "Grilled Chicken Bowl",
     description: "Lean protein with quinoa, avocado, and mixed vegetables",
@@ -242,7 +239,6 @@ const allMeals = [
     imageUrl: "https://images.unsplash.com/photo-1542578894-e1b6ba55690e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNhbG1vbiUyMGJvd2x8ZW58MHx8MHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
   },
   
-  // Dinner options
   {
     title: "Salmon with Sweet Potato",
     description: "Omega-3 rich salmon with roasted sweet potato and greens",
@@ -298,7 +294,6 @@ const allMeals = [
     imageUrl: "https://images.unsplash.com/photo-1547496502-affa22d38ae5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YmVlZiUyMHN0aXIlMjBmcnl8ZW58MHx8MHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
   },
   
-  // Snack options
   {
     title: "Protein Energy Bites",
     description: "No-bake bites with oats, protein powder, nut butter and dark chocolate",
@@ -355,7 +350,6 @@ const allMeals = [
   }
 ];
 
-// Higher calorie meal options for users with high calorie needs
 const highCalorieMeals = [
   {
     title: "High Protein Breakfast Bowl",
@@ -413,7 +407,6 @@ const highCalorieMeals = [
   }
 ];
 
-// Lower calorie meal options for users with weight loss goals
 const lowCalorieMeals = [
   {
     title: "Light Breakfast Bowl",
@@ -471,7 +464,6 @@ const lowCalorieMeals = [
   }
 ];
 
-// Daily meal plan data
 const initialDailyMealPlan = [
   { meal: "Breakfast", food: "Greek Yogurt with Berries", calories: 320, protein: 22 },
   { meal: "Lunch", food: "Grilled Chicken Salad", calories: 450, protein: 35 },
@@ -479,7 +471,6 @@ const initialDailyMealPlan = [
   { meal: "Dinner", food: "Salmon with Roasted Vegetables", calories: 520, protein: 30 }
 ];
 
-// Standard meal plan options
 const mealPlanOptions = [
   [
     { meal: "Breakfast", food: "Avocado Toast with Egg", calories: 380, protein: 18 },
@@ -501,7 +492,6 @@ const mealPlanOptions = [
   ]
 ];
 
-// High calorie meal plan options (>2500 calories)
 const highCalorieMealPlans = [
   [
     { meal: "Breakfast", food: "High Protein Breakfast Bowl", calories: 650, protein: 45 },
@@ -517,7 +507,6 @@ const highCalorieMealPlans = [
   ]
 ];
 
-// Low calorie meal plan options (<1800 calories)
 const lowCalorieMealPlans = [
   [
     { meal: "Breakfast", food: "Light Breakfast Bowl", calories: 280, protein: 24 },
@@ -538,7 +527,6 @@ const MealSuggestions: React.FC<MealSuggestionsProps> = ({ userContext }) => {
   const [displayedMeals, setDisplayedMeals] = useState(allMeals.slice(0, 8));
   const [dailyMealPlan, setDailyMealPlan] = useState(initialDailyMealPlan);
   
-  // Update meals based on user's calorie needs and goals
   useEffect(() => {
     if (userContext?.calorieNeeds) {
       updateMealDisplay(userContext);
@@ -549,19 +537,15 @@ const MealSuggestions: React.FC<MealSuggestionsProps> = ({ userContext }) => {
   const updateMealDisplay = (context: UserCalorieContext) => {
     let filteredMeals = [...allMeals];
     
-    // Add high or low calorie meals based on needs
     if (context.calorieNeeds && context.calorieNeeds > 2500) {
       filteredMeals = [...filteredMeals, ...highCalorieMeals];
     } else if (context.calorieNeeds && context.calorieNeeds < 1800) {
       filteredMeals = [...filteredMeals, ...lowCalorieMeals];
     }
     
-    // Filter for goal if applicable
     if (context.goal === 'lose') {
-      // Prioritize lower calorie and high protein options
       filteredMeals.sort((a, b) => (b.protein / b.calories) - (a.protein / a.calories));
     } else if (context.goal === 'gain') {
-      // Prioritize higher calorie and protein options
       filteredMeals.sort((a, b) => (b.calories + b.protein) - (a.calories + a.protein));
     }
     
@@ -572,15 +556,12 @@ const MealSuggestions: React.FC<MealSuggestionsProps> = ({ userContext }) => {
     let selectedMealPlan;
     
     if (context.calorieNeeds && context.calorieNeeds > 2500) {
-      // Use high calorie meal plans
       const randomIndex = Math.floor(Math.random() * highCalorieMealPlans.length);
       selectedMealPlan = highCalorieMealPlans[randomIndex];
     } else if (context.calorieNeeds && context.calorieNeeds < 1800) {
-      // Use low calorie meal plans
       const randomIndex = Math.floor(Math.random() * lowCalorieMealPlans.length);
       selectedMealPlan = lowCalorieMealPlans[randomIndex];
     } else {
-      // Use standard meal plans
       const randomIndex = Math.floor(Math.random() * mealPlanOptions.length);
       selectedMealPlan = mealPlanOptions[randomIndex];
     }
@@ -591,7 +572,6 @@ const MealSuggestions: React.FC<MealSuggestionsProps> = ({ userContext }) => {
   const filterMeals = (filter: string) => {
     let filteredMeals = allMeals;
     
-    // Add high or low calorie meals based on user context
     if (userContext?.calorieNeeds && userContext.calorieNeeds > 2500) {
       filteredMeals = [...filteredMeals, ...highCalorieMeals];
     } else if (userContext?.calorieNeeds && userContext.calorieNeeds < 1800) {
@@ -618,7 +598,6 @@ const MealSuggestions: React.FC<MealSuggestionsProps> = ({ userContext }) => {
   };
   
   const shuffleMeals = () => {
-    // Include high or low calorie meals based on user context
     let mealsToShuffle = [...allMeals];
     
     if (userContext?.calorieNeeds && userContext.calorieNeeds > 2500) {
@@ -634,4 +613,180 @@ const MealSuggestions: React.FC<MealSuggestionsProps> = ({ userContext }) => {
   const refreshMealPlan = () => {
     if (userContext?.calorieNeeds) {
       updateMealPlan(userContext);
-      toast.
+      toast.success("Meal plan refreshed with new options!");
+    }
+  };
+  
+  return (
+    <div className="container mx-auto py-12">
+      <h2 className="text-3xl font-bold text-apteats-charcoal mb-8">Personalized Meal Suggestions</h2>
+      
+      {userContext?.calorieNeeds && (
+        <div className="mb-8 p-5 bg-apteats-sage-light rounded-2xl">
+          <h3 className="text-xl font-semibold mb-4">Your Daily Meal Plan</h3>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+            {dailyMealPlan.map((meal, index) => (
+              <Card key={index} className="bg-white">
+                <div className="p-4">
+                  <div className="text-sm text-apteats-moss font-medium mb-1">{meal.meal}</div>
+                  <div className="font-medium mb-2">{meal.food}</div>
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>{meal.calories} kcal</span>
+                    <span>{meal.protein}g protein</span>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+          <div className="flex justify-between items-center">
+            <div className="text-sm">
+              <span className="font-medium">Total: </span>
+              <span>
+                {dailyMealPlan.reduce((sum, meal) => sum + meal.calories, 0)} kcal, 
+                {dailyMealPlan.reduce((sum, meal) => sum + meal.protein, 0)}g protein
+              </span>
+            </div>
+            <Button 
+              variant="secondary" 
+              size="sm" 
+              className="flex items-center" 
+              onClick={refreshMealPlan}
+            >
+              <Shuffle size={16} className="mr-2" />
+              Refresh Meal Plan
+            </Button>
+          </div>
+        </div>
+      )}
+      
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex space-x-2">
+          <Button 
+            variant={activeFilter === "all" ? "primary" : "outline"} 
+            size="sm" 
+            onClick={() => filterMeals("all")}
+          >
+            All
+          </Button>
+          <Button 
+            variant={activeFilter === "breakfast" ? "primary" : "outline"} 
+            size="sm" 
+            onClick={() => filterMeals("breakfast")}
+          >
+            Breakfast
+          </Button>
+          <Button 
+            variant={activeFilter === "lunch" ? "primary" : "outline"} 
+            size="sm" 
+            onClick={() => filterMeals("lunch")}
+          >
+            Lunch
+          </Button>
+          <Button 
+            variant={activeFilter === "dinner" ? "primary" : "outline"} 
+            size="sm" 
+            onClick={() => filterMeals("dinner")}
+          >
+            Dinner
+          </Button>
+          <Button 
+            variant={activeFilter === "snack" ? "primary" : "outline"} 
+            size="sm" 
+            onClick={() => filterMeals("snack")}
+          >
+            Snack
+          </Button>
+        </div>
+        
+        <div className="flex space-x-2">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="sm" className="flex items-center">
+                <Filter size={16} className="mr-2" />
+                Filter
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <div className="py-6">
+                <h3 className="font-semibold mb-4">Filter Meals</h3>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">Dietary Preferences</h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button 
+                        variant={activeFilter === "plant-based" ? "primary" : "outline"} 
+                        size="sm" 
+                        onClick={() => filterMeals("plant-based")}
+                        className="w-full justify-start"
+                      >
+                        <Leaf size={16} className="mr-2" /> Plant-Based
+                      </Button>
+                      <Button 
+                        variant={activeFilter === "high-protein" ? "primary" : "outline"} 
+                        size="sm" 
+                        onClick={() => filterMeals("high-protein")}
+                        className="w-full justify-start"
+                      >
+                        <Heart size={16} className="mr-2" /> High Protein
+                      </Button>
+                      <Button 
+                        variant={activeFilter === "low-carb" ? "primary" : "outline"} 
+                        size="sm" 
+                        onClick={() => filterMeals("low-carb")}
+                        className="w-full justify-start"
+                      >
+                        <Heart size={16} className="mr-2" /> Low Carb
+                      </Button>
+                      <Button 
+                        variant={activeFilter === "quick" ? "primary" : "outline"} 
+                        size="sm" 
+                        onClick={() => filterMeals("quick")}
+                        className="w-full justify-start"
+                      >
+                        <Clock size={16} className="mr-2" /> Quick Prep
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+          
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="flex items-center"
+            onClick={shuffleMeals}
+          >
+            <Shuffle size={16} className="mr-2" />
+            Shuffle
+          </Button>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {displayedMeals.map((meal, index) => (
+          <MealCard 
+            key={index}
+            title={meal.title}
+            description={meal.description}
+            calories={meal.calories}
+            protein={meal.protein}
+            carbs={meal.carbs}
+            fat={meal.fat} 
+            fiber={meal.fiber}
+            prepTime={meal.prepTime}
+            imageColor={meal.imageColor}
+            tags={meal.tags}
+            mealType={meal.mealType}
+            nutrients={meal.nutrients}
+            imageUrl={meal.imageUrl}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default MealSuggestions;
+
