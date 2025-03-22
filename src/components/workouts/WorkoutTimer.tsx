@@ -12,6 +12,7 @@ interface WorkoutTimerProps {
 const WorkoutTimer: React.FC<WorkoutTimerProps> = ({ duration, onComplete }) => {
   const [timeRemaining, setTimeRemaining] = useState(duration * 60);
   const [isActive, setIsActive] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval> | null = null;
@@ -20,14 +21,18 @@ const WorkoutTimer: React.FC<WorkoutTimerProps> = ({ duration, onComplete }) => 
       interval = setInterval(() => {
         setTimeRemaining((prevTime) => prevTime - 1);
       }, 1000);
-    } else if (timeRemaining === 0) {
+    } else if (timeRemaining === 0 && !isCompleted) {
+      setIsCompleted(true);
       onComplete();
+      toast.success("Workout completed! Great job! 🎉", {
+        description: "You're making progress towards your fitness goals!"
+      });
     }
 
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isActive, timeRemaining, onComplete]);
+  }, [isActive, timeRemaining, onComplete, isCompleted]);
 
   const toggleTimer = () => {
     setIsActive(!isActive);
@@ -39,6 +44,7 @@ const WorkoutTimer: React.FC<WorkoutTimerProps> = ({ duration, onComplete }) => 
   const resetTimer = () => {
     setIsActive(false);
     setTimeRemaining(duration * 60);
+    setIsCompleted(false);
     toast.info("Timer reset");
   };
 
@@ -64,24 +70,30 @@ const WorkoutTimer: React.FC<WorkoutTimerProps> = ({ duration, onComplete }) => 
         ></div>
       </div>
       
-      <div className="flex gap-2">
-        <Button 
-          variant="primary" 
-          className="flex-1"
-          onClick={toggleTimer}
-        >
-          {isActive ? <Pause size={16} className="mr-1" /> : <Play size={16} className="mr-1" />}
-          {isActive ? 'Pause' : 'Start'}
-        </Button>
-        <Button 
-          variant="outline" 
-          className="flex-1"
-          onClick={resetTimer}
-        >
-          <RefreshCw size={16} className="mr-1" />
-          Reset
-        </Button>
-      </div>
+      {isCompleted ? (
+        <div className="text-center text-apteats-moss font-medium mb-4">
+          Workout completed! 🎉
+        </div>
+      ) : (
+        <div className="flex gap-2">
+          <Button 
+            variant="primary" 
+            className="flex-1"
+            onClick={toggleTimer}
+          >
+            {isActive ? <Pause size={16} className="mr-1" /> : <Play size={16} className="mr-1" />}
+            {isActive ? 'Pause' : 'Start'}
+          </Button>
+          <Button 
+            variant="outline" 
+            className="flex-1"
+            onClick={resetTimer}
+          >
+            <RefreshCw size={16} className="mr-1" />
+            Reset
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

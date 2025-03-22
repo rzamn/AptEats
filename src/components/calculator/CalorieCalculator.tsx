@@ -3,12 +3,17 @@ import { cn } from '@/lib/utils';
 import Card from '../shared/Card';
 import Button from '../shared/Button';
 import { ArrowRight, Calculator } from 'lucide-react';
+import { UserCalorieContext } from '@/pages/Index';
 
 type ActivityLevel = 'sedentary' | 'light' | 'moderate' | 'active' | 'very-active';
 type Goal = 'lose' | 'maintain' | 'gain';
 type Gender = 'male' | 'female';
 
-const CalorieCalculator = () => {
+interface CalorieCalculatorProps {
+  onCalculate?: (calories: number, goal: Goal, activityLevel: ActivityLevel) => void;
+}
+
+const CalorieCalculator = ({ onCalculate }: CalorieCalculatorProps) => {
   const [formData, setFormData] = useState({
     age: '',
     gender: 'male' as Gender,
@@ -88,7 +93,12 @@ const CalorieCalculator = () => {
       calorieNeeds = tdee;
     }
     
-    setResult(Math.round(calorieNeeds));
+    const roundedCalories = Math.round(calorieNeeds);
+    setResult(roundedCalories);
+    
+    if (onCalculate) {
+      onCalculate(roundedCalories, goal, activityLevel);
+    }
   };
   
   return (

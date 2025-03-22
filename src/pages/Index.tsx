@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import HeroSection from '@/components/hero/HeroSection';
 import CalorieCalculator from '@/components/calculator/CalorieCalculator';
@@ -9,7 +9,21 @@ import TestimonialsSection from '@/components/testimonials/TestimonialsSection';
 import Button from '@/components/shared/Button';
 import { ArrowRight } from 'lucide-react';
 
+// Shared state interfaces for app integration
+export interface UserCalorieContext {
+  calorieNeeds: number | null;
+  goal: 'lose' | 'maintain' | 'gain' | null;
+  activityLevel: 'sedentary' | 'light' | 'moderate' | 'active' | 'very-active' | null;
+}
+
 const Index = () => {
+  // Shared state for app integration
+  const [userContext, setUserContext] = useState<UserCalorieContext>({
+    calorieNeeds: null,
+    goal: null,
+    activityLevel: null
+  });
+
   useEffect(() => {
     // Add 'loaded' class to body for animation triggering
     document.body.classList.add('loaded');
@@ -66,13 +80,22 @@ const Index = () => {
     }
   };
 
+  // Handler to update user context when calorie needs are calculated
+  const handleCalorieCalculation = (calories: number, goal: 'lose' | 'maintain' | 'gain', activity: 'sedentary' | 'light' | 'moderate' | 'active' | 'very-active') => {
+    setUserContext({
+      calorieNeeds: calories,
+      goal: goal,
+      activityLevel: activity
+    });
+  };
+
   return (
     <div className="min-h-screen">
       <Navbar scrollToCalculator={scrollToCalculator} />
       <HeroSection scrollToCalculator={scrollToCalculator} />
-      <CalorieCalculator />
-      <MealSuggestions />
-      <WorkoutRecommendations />
+      <CalorieCalculator onCalculate={handleCalorieCalculation} />
+      <MealSuggestions userContext={userContext} />
+      <WorkoutRecommendations userContext={userContext} />
       <TestimonialsSection />
       
       {/* Final CTA Section */}
