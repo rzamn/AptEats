@@ -1,5 +1,4 @@
-# Welcome to your Lovable project
-
+AptEats
 ## Project info
 
 **URL**: https://lovable.dev/projects/406db5b7-d889-4662-a8b8-67323245fa49
@@ -8,9 +7,9 @@
 
 There are several ways of editing your application.
 
-**Use Lovable**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/406db5b7-d889-4662-a8b8-67323245fa49) and start prompting.
+
+Simply visit the (https://lovable.dev/projects/406db5b7-d889-4662-a8b8-67323245fa49) and start prompting.
 
 Changes made via Lovable will be committed automatically to this repo.
 
@@ -62,7 +61,7 @@ This project is built with .
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/406db5b7-d889-4662-a8b8-67323245fa49) and click on Share -> Publish.
+Simply open (https://lovable.dev/projects/406db5b7-d889-4662-a8b8-67323245fa49) and click on Share -> Publish.
 
 ## I want to use a custom domain - is that possible?
 
