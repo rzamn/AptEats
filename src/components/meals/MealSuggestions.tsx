@@ -502,7 +502,7 @@ const MealSuggestions = () => {
             size="sm" 
             onClick={() => filterMeals("quick")}
           >
-            Quick (<15 min)
+            Quick (&lt;15 min)
           </Button>
           <Button 
             variant="outline" 
