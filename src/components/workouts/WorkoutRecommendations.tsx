@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Card from '../shared/Card';
 import Button from '../shared/Button';
@@ -19,6 +18,7 @@ import {
 } from 'lucide-react';
 import { toast } from "sonner";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { UserCalorieContext } from '@/pages/Index';
 
 interface WorkoutCardProps {
   title: string;
@@ -455,7 +455,11 @@ const bodyTypes = [
   }
 ];
 
-const WorkoutRecommendations = () => {
+interface WorkoutRecommendationsProps {
+  userContext: UserCalorieContext;
+}
+
+const WorkoutRecommendations: React.FC<WorkoutRecommendationsProps> = ({ userContext }) => {
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [displayedWorkouts, setDisplayedWorkouts] = useState(allWorkouts.slice(0, 8));
   
