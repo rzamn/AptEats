@@ -40,7 +40,7 @@ interface MealCardProps {
 }
 
 interface MealSuggestionsProps {
-  userContext?: UserCalorieContext;
+  userContext: UserCalorieContext;
 }
 
 const MealCard = ({ 
@@ -789,4 +789,3 @@ const MealSuggestions: React.FC<MealSuggestionsProps> = ({ userContext }) => {
 };
 
 export default MealSuggestions;
-

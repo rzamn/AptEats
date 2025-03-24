@@ -94,7 +94,20 @@ const Index = () => {
       <Navbar scrollToCalculator={scrollToCalculator} />
       <HeroSection scrollToCalculator={scrollToCalculator} />
       <CalorieCalculator onCalculate={handleCalorieCalculation} />
-      <MealSuggestions userContext={userContext} />
+      
+      {/* Only render MealSuggestions when we have user context with calculated calories */}
+      {userContext.calorieNeeds ? (
+        <MealSuggestions userContext={userContext} />
+      ) : (
+        <div id="nutrition" className="py-12 text-center">
+          <h2 className="text-3xl font-bold text-apteats-charcoal mb-4">Calculate Your Calorie Needs First</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
+            Get personalized meal suggestions based on your calorie needs and fitness goals.
+          </p>
+          <Button onClick={scrollToCalculator}>Calculate Now</Button>
+        </div>
+      )}
+      
       <WorkoutRecommendations userContext={userContext} />
       <TestimonialsSection />
       
